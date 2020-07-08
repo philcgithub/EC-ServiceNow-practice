@@ -1,0 +1,154 @@
+pluginInfo:
+  # This is default sample specification
+  # Feel free to change it
+  # Call flowpdk showdoc pluginspec to see the list of available fields and their description
+  pluginName: 'EC-ServiceNow-practice'
+  version: '1.0.1'
+  description: 'Practice using alternative ServiceNow apis'
+  author: 'Phil Cherry'
+  supportUrl: 'none'
+  category: 'Resource Management'
+  shell: 'ec-perl'
+
+# REST-backed plugin configuration
+configuration:
+  checkConnection: true
+  restConfigInfo:
+    endpointLabel: 'ServiceNow address, e.g. https://ven01735.service-now.com'
+    checkConnectionUri: '/api/sn_chg_rest/change/normal?sysparm_limit=1'
+    headers:
+      Accept: 'application/json'
+    authSchemes:
+      basic:
+        userNameLabel: 'Username'
+        passwordLabel: 'Password'
+        description: 'Username and password to connect to ...'
+  hasProxySupport: true
+  hasDebugLevel: true
+
+procedures:
+-
+  name: 'Get Change Request'
+  description: 'Get Change Request'
+  hasConfig: true
+  shell: 'ec-perl'
+  parameters:
+  -
+    name: cr_sysid
+    documentation: Change Request SysID (e.g. 123123172351264asdasd162123)
+    required: true
+    type: entry
+    label: CR SysID
+    restParamInfo:
+      in: path
+  outputParameters:
+  -
+    name: ResponseContent
+    description: Rest API Result
+  # Connects REST endpoint to the plugin procedure
+  restProcedureInfo:
+    url: '/api/sn_chg_rest/change/normal?sysparm_query=sys_id={{cr_sysid}}'
+    methodName: 'getChangeRequest'
+    httpMethod: 'GET'
+    contentType: 'application/json'
+    accept: 'application/json'
+-
+  name: 'Create Change Request'
+  description: 'Create Change Request'
+  hasConfig: true
+  shell: 'ec-perl'
+  parameters:
+  -
+    name: body
+    documentation: Change Request details in key-value pair format
+    required: true
+    type: textarea
+    label: CR Details
+    restParamInfo:
+      in: body
+  outputParameters:
+  -
+    name: ResponseContent
+    description: Rest API Result
+  -
+    name: ChangeRequestSysID
+    description: Change Request SysID
+  -
+    name: ChangeRequestLink
+    description: Link to Change Request
+  # Connects REST endpoint to the plugin procedure
+  restProcedureInfo:
+    url: '/api/sn_chg_rest/change/normal'
+    methodName: 'createChangeRequest'
+    httpMethod: 'POST'
+    contentType: 'application/json'
+    accept: 'application/json'
+-
+  name: 'Modify Change Request'
+  description: 'Modify Change Request'
+  hasConfig: true
+  shell: 'ec-perl'
+  parameters:
+  -
+    name: cr_sysid
+    documentation: Change Request SysID (e.g. 123123172351264asdasd162123)
+    required: true
+    type: entry
+    label: CR SysID
+    restParamInfo:
+      in: path
+  -
+    name: body
+    documentation: Changes to make to Change Request details in key-value pair format
+    required: true
+    type: textarea
+    label: CR Details
+    restParamInfo:
+      in: body
+  outputParameters:
+  -
+    name: ResponseContent
+    description: Rest API Result
+  # Connects REST endpoint to the plugin procedure
+  restProcedureInfo:
+    url: '/api/sn_chg_rest/change/normal/{{cr_sysid}}'
+    methodName: 'modifyChangeRequest'
+    httpMethod: 'PATCH'
+    contentType: 'application/json'
+    accept: 'application/json'
+-
+  name: 'Upload attachment to Change Request'
+  description: 'Upload attachment to Change Request'
+  hasConfig: true
+  shell: 'ec-perl'
+  parameters:
+  -
+    name: table_name
+    documentation: The name of the table you want to attach the file to.
+    required: true
+    type: entry
+    label: Table name
+    restParamInfo:
+      in: body
+  -
+    name: table_sys_id
+    documentation: The sys_id of the record on the specified table that you want to attach the file to.
+    required: true
+    type: entry
+    label: SysID
+    restParamInfo:
+      in: body
+  -
+    name: uploadFile
+    documentation: Location and name of file to upload.  Location is relative to the agent where this step will run., e.g. /tmp/WordDoc1.docx
+    required: true
+    type: entry
+    label: location
+    restParamInfo:
+      in: body
+  # Connects REST endpoint to the plugin procedure
+  restProcedureInfo:
+    url: '/api/now/attachment/upload'
+    methodName: 'uploadAttachementToChangeRequest'
+    httpMethod: 'POST'
+    contentType: 'multipart/form-data'

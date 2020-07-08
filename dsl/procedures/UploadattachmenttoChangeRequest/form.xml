@@ -1,0 +1,37 @@
+<!--
+    This form is generated automatically from the parameters pluginspec.
+    Please not not edit this file manually as it will be regenerated.
+-->
+<editor>
+  <help>/commander/pages/@PLUGIN_NAME@/help?s=Administration&amp;ss=Plugins#UploadattachmenttoChangeRequest</help>
+  <formElement>
+    <type>entry</type>
+    <property>config</property>
+    <configuration>1</configuration>
+    <propertyReference>/plugins/@PLUGIN_NAME@/project/ec_plugin_cfgs</propertyReference>
+    <required>1</required>
+    <documentation>Previously defined configuration for the plugin</documentation>
+    <label>Configuration Name:</label>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <property>table_name</property>
+    <required>1</required>
+    <documentation>The name of the table you want to attach the file to.</documentation>
+    <label>Table name:</label>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <property>table_sys_id</property>
+    <required>1</required>
+    <documentation>The sys_id of the record on the specified table that you want to attach the file to.</documentation>
+    <label>SysID:</label>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <property>uploadFile</property>
+    <required>1</required>
+    <documentation>Location and name of file to upload.  Location is relative to the agent where this step will run., e.g. /tmp/WordDoc1.docx</documentation>
+    <label>location:</label>
+  </formElement>
+</editor>
